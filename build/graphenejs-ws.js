@@ -34,7 +34,7 @@ module.exports = {
         @return {Apis} singleton .. Check Apis.instance().init_promise to know when the connection is established
     */
     reset: function reset() {
-        var cs = arguments.length <= 0 || arguments[0] === undefined ? "ws://localhost:8090" : arguments[0];
+        var cs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "ws://localhost:8090";
         var connect = arguments[1];
 
         if (inst) {
@@ -51,7 +51,7 @@ module.exports = {
         return inst;
     },
     instance: function instance() {
-        var cs = arguments.length <= 0 || arguments[0] === undefined ? "ws://localhost:8090" : arguments[0];
+        var cs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "ws://localhost:8090";
         var connect = arguments[1];
 
         if (!inst) {
@@ -205,7 +205,17 @@ module.exports = _this = {
             core_asset: "GOV",
             address_prefix: "FEW",
             chain_id: "1cfde7c388b9e8ac06462d68aadbd966b58f88797637d9af805b4560b0e9661e"
-        }
+        },
+		Peerplays: {
+			core_asset: "TEST",
+			address_prefix: "TEST",
+			chain_id: "4dc0a16f717d4d326933eb7f306b9ef7511f8bc48e9b58fc3ab04b4848af1cb7"
+		},
+		PeerplaysDev: {
+			core_asset: "TEST",
+			address_prefix: "TEST",
+			chain_id: "94b25f512e2d74bb0c9bbfd5042cd592c483c6f72fbe10968af94ba0e82d4cd9"
+		}
     },
 
     /** Set a few properties for known chain IDs. */
@@ -253,7 +263,7 @@ module.exports = _this = {
     },
 
     setPrefix: function setPrefix() {
-        var prefix = arguments.length <= 0 || arguments[0] === undefined ? "GPH" : arguments[0];
+        var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "GPH";
 
         _this.address_prefix = prefix;
         ecc_config.address_prefix = prefix;
