@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pbsa/peerplaysjs-ws.git"
+    "url": "git+https://github.com/peerplays-network/peerplaysjs-ws.git"
   },
   "contributors": [
     "Sigve Kvalsvik <bitsharesblocks@gmail.com> (https://github.com/svk31)",
@@ -28,7 +28,7 @@
   ],
   "license": "BSD-2-Clause-FreeBSD",
   "bugs": {
-    "url": "https://github.com/PBSA/peerplaysjs-ws/issues"
+    "url": "https://github.com/peerplays-network/peerplaysjs-ws/issues"
   },
   "engines": {
     "node": ">= 6.0.0"
