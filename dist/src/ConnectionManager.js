@@ -21,7 +21,12 @@ var Manager = function () {
 
     _classCallCheck(this, Manager);
 
-    this.url = url;
+    if (this.url === undefined) {
+      this.url = urls[0];
+    } else {
+      this.url = url;
+    }
+
     this.urls = urls.filter(function (a) {
       return a !== url;
     });
@@ -76,39 +81,61 @@ var Manager = function () {
     });
   };
 
-  Manager.prototype.checkConnections = function checkConnections() {
-    var rpc_user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-    var rpc_password = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  /**
+   * pings node and returns a key value pair {url:latency}
+   * 
+   * @param {ChainWebSocket} conn: pass in an instance of ChainWebSocket
+   * @memberof Manager
+   */
 
+  Manager.prototype.ping = function ping(conn, resolve, reject) {
+    var connectionStartTimes = {};
+    var url = conn.serverAddress;
+    connectionStartTimes[url] = new Date().getTime();
+
+    var doPing = function doPing(resolve, reject) {
+      conn.login('', '')
+      // Pass in blank rpc_user and rpc_password.
+      .then(function (result) {
+        var _urlLatency;
+
+        // Make sure connection is closed as it is simply a health check
+        if (result) {
+          conn.close();
+        }
+
+        var urlLatency = (_urlLatency = {}, _urlLatency[url] = new Date().getTime() - connectionStartTimes[url], _urlLatency);
+        console.log('ping latency: ', urlLatency);
+        resolve(urlLatency);
+      }).catch(function (err) {
+        console.error('PING ERROR: ', err);
+        reject(err);
+      });
+    };
+
+    if (resolve && reject) {
+      doPing(resolve, reject);
+    } else {
+      return new Promise(doPing);
+    }
+  };
+
+  Manager.prototype.checkConnections = function checkConnections(resolve, reject) {
     var _this2 = this;
-
-    var resolve = arguments[2];
-    var reject = arguments[3];
 
     var connectionStartTimes = {};
 
     var checkFunction = function checkFunction(resolve, reject) {
-      var fullList = _this2.urls.concat(_this2.url);
+      var fullList = _this2.urls;
       var connectionPromises = [];
 
       fullList.forEach(function (url) {
         var conn = new _ChainWebSocket2.default(url, function () {});
         connectionStartTimes[url] = new Date().getTime();
         connectionPromises.push(function () {
-          return conn.login(rpc_user, rpc_password).then(function () {
-            var _ref2;
-
-            conn.close();
-            return _ref2 = {}, _ref2[url] = new Date().getTime() - connectionStartTimes[url], _ref2;
+          return _this2.ping(conn).then(function (urlLatency) {
+            return urlLatency;
           }).catch(function () {
-            if (url === _this2.url) {
-              _this2.url = _this2.urls[0];
-            } else {
-              _this2.urls = _this2.urls.filter(function (a) {
-                return a !== url;
-              });
-            }
-
             conn.close();
             return null;
           });
@@ -126,7 +153,7 @@ var Manager = function () {
           return f;
         }, {}));
       }).catch(function () {
-        return _this2.checkConnections(rpc_user, rpc_password, resolve, reject);
+        return _this2.checkConnections(resolve, reject);
       });
     };
 
