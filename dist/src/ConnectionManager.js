@@ -76,6 +76,35 @@ var Manager = function () {
     });
   };
 
+  /**
+  * sorts the nodes into a list based on latency
+  * 
+  * @memberof Manager
+  */
+
+
+  Manager.prototype.sortNodesByLatency = function sortNodesByLatency(resolve, reject) {
+    var latencyList = this.checkConnections();
+
+    //sort list by latency
+    var checkFunction = function checkFunction(resolve, reject) {
+      latencyList.then(function (response) {
+        console.log('unsorted latency list: ', response);
+        var sortedList = Object.keys(response).sort(function (a, b) {
+          return response[a] - response[b];
+        });
+        resolve(sortedList);
+      }).catch(function (err) {
+        reject(err);
+      });
+    };
+    if (resolve && reject) {
+      checkFunction(resolve, reject);
+    } else {
+      return new Promise(checkFunction);
+    }
+  };
+
   Manager.prototype.checkConnections = function checkConnections() {
     var rpc_user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
     var rpc_password = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
