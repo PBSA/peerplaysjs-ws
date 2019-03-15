@@ -36,6 +36,12 @@ var Manager = function () {
     console.error('Unable to connect to', url + ', skipping to next full node API server');
   };
 
+  Manager.prototype.isURL = function isURL(str) {
+    var endpointPattern = new RegExp('^(?:ws(s)?:\\\/\\\/)|(?:http(s)?:\\\/\\\/)' + '?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:\\\/?#[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$');
+
+    return endpointPattern.test(str);
+  };
+
   Manager.prototype.connect = function connect() {
     var _connect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
@@ -91,6 +97,11 @@ var Manager = function () {
   Manager.prototype.ping = function ping(conn, resolve, reject) {
     var connectionStartTimes = {};
     var url = conn.serverAddress;
+
+    if (!this.isURL(url)) {
+      throw Error('URL NOT VALID', url);
+    }
+
     connectionStartTimes[url] = new Date().getTime();
 
     var doPing = function doPing(resolve, reject) {
