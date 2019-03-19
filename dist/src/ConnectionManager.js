@@ -37,9 +37,7 @@ var Manager = function () {
   };
 
   Manager.prototype.isURL = function isURL(str) {
-    var endpointPattern = new RegExp('((^(?:ws(s)?:\\\/\\\/)|(?:http(s)?:\\\/\\\/))+((?:[^\\\/\\\/\\\.])+\??(?:[-\\+=&;%@.\\w_]*)((#?(?:[\\w])*)(:?[0-9]*))))');
-
-    //((^(?:ws(s)?:\\\/\\\/)|(?:http(s)?:\\\/\\\/))+((?:[^\\\/\\\/\\\.])+\??(?:[-\\+=&;%@.\\w_]*)((#?(?:[\\w])*)(:?[0-9]*))))
+    var endpointPattern = new RegExp('((^(?:ws(s)?:\\/\\/)|(?:http(s)?:\\/\\/))+((?:[^\\/\\/\\.])+\\??(?:[-\\+=&;%@.\\w_]*)((#?(?:[\\w])*)(:?[0-9]*))))');
 
     return endpointPattern.test(str);
   };
