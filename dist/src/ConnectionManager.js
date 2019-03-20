@@ -15,6 +15,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Manager = function () {
+
+  /**
+   *Creates an instance of Manager. 
+   * Constructor can take either one url, or an array of urls 
+   * @param {*} {url, urls}
+   * @memberof Manager
+   */
   function Manager(_ref) {
     var url = _ref.url,
         urls = _ref.urls;
@@ -105,9 +112,8 @@ var Manager = function () {
     connectionStartTimes[url] = new Date().getTime();
 
     var doPing = function doPing(resolve, reject) {
-      conn.login('', '')
       // Pass in blank rpc_user and rpc_password.
-      .then(function (result) {
+      conn.login('', '').then(function (result) {
         var _urlLatency;
 
         // Make sure connection is closed as it is simply a health check
@@ -131,10 +137,15 @@ var Manager = function () {
     }
   };
 
+  /**
+   * pings each url in the list, and returns a promise based list of key value pairs {url:latency}
+   * 
+   * @memberof Manager
+   */
+
+
   Manager.prototype.checkConnections = function checkConnections(resolve, reject) {
     var _this2 = this;
-
-    var connectionStartTimes = {};
 
     var checkFunction = function checkFunction(resolve, reject) {
       var fullList = _this2.urls;
@@ -142,7 +153,7 @@ var Manager = function () {
 
       fullList.forEach(function (url) {
         var conn = new _ChainWebSocket2.default(url, function () {});
-        connectionStartTimes[url] = new Date().getTime();
+
         connectionPromises.push(function () {
           return _this2.ping(conn).then(function (urlLatency) {
             return urlLatency;
