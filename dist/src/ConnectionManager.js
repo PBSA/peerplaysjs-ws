@@ -14,19 +14,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Manager = function () {
+var ConnectionManager = function () {
 
   /**
-   *Creates an instance of Manager. 
+   *Creates an instance of ConnectionManager. 
    * Constructor can take either one url, or an array of urls 
    * @param {*} {url, urls}
-   * @memberof Manager
+   * @memberof ConnectionManager
    */
-  function Manager(_ref) {
+  function ConnectionManager(_ref) {
     var url = _ref.url,
         urls = _ref.urls;
 
-    _classCallCheck(this, Manager);
+    _classCallCheck(this, ConnectionManager);
 
     if (this.url === undefined) {
       this.url = urls[0];
@@ -39,17 +39,17 @@ var Manager = function () {
     });
   }
 
-  Manager.prototype.logFailure = function logFailure(url) {
+  ConnectionManager.prototype.logFailure = function logFailure(url) {
     console.error('Unable to connect to', url + ', skipping to next full node API server');
   };
 
-  Manager.prototype.isURL = function isURL(str) {
+  ConnectionManager.prototype.isURL = function isURL(str) {
     var endpointPattern = new RegExp('((^(?:ws(s)?:\\/\\/)|(?:http(s)?:\\/\\/))+((?:[^\\/\\/\\.])+\\??(?:[-\\+=&;%@.\\w_]*)((#?(?:[\\w])*)(:?[0-9]*))))');
 
     return endpointPattern.test(str);
   };
 
-  Manager.prototype.connect = function connect() {
+  ConnectionManager.prototype.connect = function connect() {
     var _connect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
     var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.url;
@@ -62,7 +62,7 @@ var Manager = function () {
     });
   };
 
-  Manager.prototype.connectWithFallback = function connectWithFallback() {
+  ConnectionManager.prototype.connectWithFallback = function connectWithFallback() {
     var connect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
     var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.url;
     var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
@@ -98,10 +98,10 @@ var Manager = function () {
    * pings node and returns a key value pair {url:latency}
    * 
    * @param {ChainWebSocket} conn: pass in an instance of ChainWebSocket
-   * @memberof Manager
+   * @memberof ConnectionManager
    */
 
-  Manager.prototype.ping = function ping(conn, resolve, reject) {
+  ConnectionManager.prototype.ping = function ping(conn, resolve, reject) {
     var connectionStartTimes = {};
     var url = conn.serverAddress;
 
@@ -140,11 +140,11 @@ var Manager = function () {
   /**
    * pings each url in the list, and returns a promise based list of key value pairs {url:latency}
    * 
-   * @memberof Manager
+   * @memberof ConnectionManager
    */
 
 
-  Manager.prototype.checkConnections = function checkConnections(resolve, reject) {
+  ConnectionManager.prototype.checkConnections = function checkConnections(resolve, reject) {
     var _this2 = this;
 
     var checkFunction = function checkFunction(resolve, reject) {
@@ -186,7 +186,7 @@ var Manager = function () {
     }
   };
 
-  return Manager;
+  return ConnectionManager;
 }();
 
-exports.default = Manager;
+exports.default = ConnectionManager;
