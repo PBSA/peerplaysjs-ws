@@ -14,12 +14,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Manager = function () {
-  function Manager(_ref) {
+var ConnectionManager = function () {
+  function ConnectionManager(_ref) {
     var url = _ref.url,
         urls = _ref.urls;
 
-    _classCallCheck(this, Manager);
+    _classCallCheck(this, ConnectionManager);
 
     this.url = url;
     this.urls = urls.filter(function (a) {
@@ -27,11 +27,11 @@ var Manager = function () {
     });
   }
 
-  Manager.prototype.logFailure = function logFailure(url) {
+  ConnectionManager.prototype.logFailure = function logFailure(url) {
     console.error('Unable to connect to', url + ', skipping to next full node API server');
   };
 
-  Manager.prototype.connect = function connect() {
+  ConnectionManager.prototype.connect = function connect() {
     var _connect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
     var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.url;
@@ -44,7 +44,7 @@ var Manager = function () {
     });
   };
 
-  Manager.prototype.connectWithFallback = function connectWithFallback() {
+  ConnectionManager.prototype.connectWithFallback = function connectWithFallback() {
     var connect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
     var url = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.url;
     var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
@@ -79,11 +79,11 @@ var Manager = function () {
   /**
   * sorts the nodes into a list based on latency
   * 
-  * @memberof Manager
+  * @memberof ConnectionManager
   */
 
 
-  Manager.prototype.sortNodesByLatency = function sortNodesByLatency(resolve, reject) {
+  ConnectionManager.prototype.sortNodesByLatency = function sortNodesByLatency(resolve, reject) {
     var latencyList = this.checkConnections();
 
     //sort list by latency
@@ -105,7 +105,7 @@ var Manager = function () {
     }
   };
 
-  Manager.prototype.checkConnections = function checkConnections() {
+  ConnectionManager.prototype.checkConnections = function checkConnections() {
     var rpc_user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
     var rpc_password = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
@@ -166,7 +166,7 @@ var Manager = function () {
     }
   };
 
-  return Manager;
+  return ConnectionManager;
 }();
 
-exports.default = Manager;
+exports.default = ConnectionManager;
