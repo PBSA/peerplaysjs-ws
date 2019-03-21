@@ -873,31 +873,19 @@ var ConnectionManager = function () {
   };
 
   /**
-<<<<<<< HEAD
    * pings node and returns a key value pair {url:latency}
    * 
    * @param {ChainWebSocket} conn: pass in an instance of ChainWebSocket
    * @memberof ConnectionManager
    */
-=======
-  * sorts the nodes into a list based on latency
-  * 
-  * @memberof ConnectionManager
-  */
->>>>>>> PJL-12-choose-lowest-latency-node
 
   ConnectionManager.prototype.ping = function ping(conn, resolve, reject) {
     var connectionStartTimes = {};
     var url = conn.serverAddress;
 
-<<<<<<< HEAD
     if (!this.isURL(url)) {
       throw Error('URL NOT VALID', url);
     }
-=======
-  ConnectionManager.prototype.sortNodesByLatency = function sortNodesByLatency(resolve, reject) {
-    var latencyList = this.checkConnections();
->>>>>>> PJL-12-choose-lowest-latency-node
 
     connectionStartTimes[url] = new Date().getTime();
 
