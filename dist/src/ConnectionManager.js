@@ -31,6 +31,12 @@ var ConnectionManager = function () {
     console.error('Unable to connect to', url + ', skipping to next full node API server');
   };
 
+  ConnectionManager.prototype.isURL = function isURL(str) {
+    var endpointPattern = new RegExp('((^(?:ws(s)?:\\/\\/)|(?:http(s)?:\\/\\/))+((?:[^\\/\\/\\.])+\\??(?:[-\\+=&;%@.\\w_]*)((#?(?:[\\w])*)(:?[0-9]*))))');
+
+    return endpointPattern.test(str);
+  };
+
   ConnectionManager.prototype.connect = function connect() {
     var _connect = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
