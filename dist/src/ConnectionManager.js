@@ -76,9 +76,44 @@ var ConnectionManager = function () {
     });
   };
 
+  ConnectionManager.prototype.ping = function ping(conn, resolve, reject) {
+    var connectionStartTimes = {};
+    var url = conn.serverAddress;
+
+    if (!this.isURL(url)) {
+      throw Error('URL NOT VALID', url);
+    }
+
+    connectionStartTimes[url] = new Date().getTime();
+
+    var doPing = function doPing(resolve, reject) {
+      // Pass in blank rpc_user and rpc_password.
+      conn.login('', '').then(function (result) {
+        var _urlLatency;
+
+        // Make sure connection is closed as it is simply a health check
+        if (result) {
+          conn.close();
+        }
+
+        var urlLatency = (_urlLatency = {}, _urlLatency[url] = new Date().getTime() - connectionStartTimes[url], _urlLatency);
+        console.log('ping latency: ', urlLatency);
+        resolve(urlLatency);
+      }).catch(function (err) {
+        console.error('PING ERROR: ', err);
+        reject(err);
+      });
+    };
+
+    if (resolve && reject) {
+      doPing(resolve, reject);
+    } else {
+      return new Promise(doPing);
+    }
+  };
+
   /**
   * sorts the nodes into a list based on latency
-  * 
   * @memberof ConnectionManager
   */
 
@@ -86,7 +121,7 @@ var ConnectionManager = function () {
   ConnectionManager.prototype.sortNodesByLatency = function sortNodesByLatency(resolve, reject) {
     var latencyList = this.checkConnections();
 
-    //sort list by latency
+    // Sort list by latency
     var checkFunction = function checkFunction(resolve, reject) {
       latencyList.then(function (response) {
         console.log('unsorted latency list: ', response);
@@ -98,6 +133,7 @@ var ConnectionManager = function () {
         reject(err);
       });
     };
+
     if (resolve && reject) {
       checkFunction(resolve, reject);
     } else {
@@ -105,39 +141,20 @@ var ConnectionManager = function () {
     }
   };
 
-  ConnectionManager.prototype.checkConnections = function checkConnections() {
-    var rpc_user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-    var rpc_password = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-
+  ConnectionManager.prototype.checkConnections = function checkConnections(resolve, reject) {
     var _this2 = this;
 
-    var resolve = arguments[2];
-    var reject = arguments[3];
-
-    var connectionStartTimes = {};
-
     var checkFunction = function checkFunction(resolve, reject) {
-      var fullList = _this2.urls.concat(_this2.url);
+      var fullList = _this2.urls;
       var connectionPromises = [];
 
       fullList.forEach(function (url) {
         var conn = new _ChainWebSocket2.default(url, function () {});
-        connectionStartTimes[url] = new Date().getTime();
+
         connectionPromises.push(function () {
-          return conn.login(rpc_user, rpc_password).then(function () {
-            var _ref2;
-
-            conn.close();
-            return _ref2 = {}, _ref2[url] = new Date().getTime() - connectionStartTimes[url], _ref2;
+          return _this2.ping(conn).then(function (urlLatency) {
+            return urlLatency;
           }).catch(function () {
-            if (url === _this2.url) {
-              _this2.url = _this2.urls[0];
-            } else {
-              _this2.urls = _this2.urls.filter(function (a) {
-                return a !== url;
-              });
-            }
-
             conn.close();
             return null;
           });
@@ -155,7 +172,7 @@ var ConnectionManager = function () {
           return f;
         }, {}));
       }).catch(function () {
-        return _this2.checkConnections(rpc_user, rpc_password, resolve, reject);
+        return _this2.checkConnections(resolve, reject);
       });
     };
 
