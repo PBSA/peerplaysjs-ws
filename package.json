@@ -1,6 +1,6 @@
 {
   "name": "peerplaysjs-ws",
-  "version": "0.1.11",
+  "version": "0.5.0",
   "description": "Pure JavaScript Peerplays/Graphene websocket interface for node.js and browsers.",
   "browser": {
     "ws": false
@@ -10,9 +10,9 @@
     "commit": "git-cz",
     "pre-release": "npm run release -- --prerelease rc",
     "release": "standard-version",
-    "release:major": "npm run release -- --release-as major",
-    "release:minor": "npm run release -- --release-as minor",
-    "release:patch": "npm run release -- --release-as patch",
+    "release-major": "npm run release -- --release-as major",
+    "release-minor": "npm run release -- --release-as minor",
+    "release-patch": "npm run release -- --release-as patch",
     "test": "mocha --recursive --compilers js:babel-core/register",
     "test:watch": "npm test -- --watch",
     "test:manager": "mocha --compilers js:babel-core/register ./test/Manager --watch",
