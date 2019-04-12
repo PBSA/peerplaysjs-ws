@@ -1,7 +1,7 @@
 'use strict';
 
 exports.__esModule = true;
-exports.ConnectionManager = exports.ChainConfig = exports.Apis = undefined;
+exports.ChainWebSocket = exports.ConnectionManager = exports.ChainConfig = exports.Apis = undefined;
 
 var _ApiInstances = require('./src/ApiInstances');
 
@@ -15,8 +15,13 @@ var _ChainConfig = require('./src/ChainConfig');
 
 var _ChainConfig2 = _interopRequireDefault(_ChainConfig);
 
+var _ChainWebSocket = require('./src/ChainWebSocket');
+
+var _ChainWebSocket2 = _interopRequireDefault(_ChainWebSocket);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.Apis = _ApiInstances2.default;
 exports.ChainConfig = _ChainConfig2.default;
 exports.ConnectionManager = _ConnectionManager2.default;
+exports.ChainWebSocket = _ChainWebSocket2.default;
