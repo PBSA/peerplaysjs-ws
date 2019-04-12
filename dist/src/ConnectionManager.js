@@ -103,10 +103,9 @@ var ConnectionManager = function () {
         }
 
         var urlLatency = (_urlLatency = {}, _urlLatency[url] = new Date().getTime() - connectionStartTimes[url], _urlLatency);
-        console.log('ping latency: ', urlLatency);
         resolve(urlLatency);
       }).catch(function (err) {
-        console.error('PING ERROR: ', err);
+        console.warn('PING ERROR: ', err);
         reject(err);
       });
     };
@@ -130,7 +129,6 @@ var ConnectionManager = function () {
     // Sort list by latency
     var checkFunction = function checkFunction(resolve, reject) {
       latencyList.then(function (response) {
-        console.log('unsorted latency list: ', response);
         var sortedList = Object.keys(response).sort(function (a, b) {
           return response[a] - response[b];
         });
