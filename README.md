@@ -1,5 +1,10 @@
 # Peerplays WebSocket interface (peerplaysjs-ws)
 
+<details><summary>DEPRECATED</summary>
+
+> THIS LIBRARY IS NOW DEPRECATED AS IT IS A PART OF [PEERPLAYSJS-LIB](https://github.com/peerplays-network/peerplaysjs-lib). PLEASE USE PEERPLAYSJS-LIB INSTEAD.
+
+<details><summary>Deprecated documentation</summary>
 Pure JavaScript Peerplays websocket library for node.js and browsers. Can be used to easily connect to and obtain data from the Peerplays blockchain via public apis or local nodes.
 
 Credit for the original implementation goes to [jcalfee](https://github.com/jcalfee).
@@ -101,3 +106,5 @@ npm run release-patch // patch bump
 // To cut a pre-release:
 npm run prerelease // v0.2.1 to v0.2.2-rc.0
 ```
+</details>
+</details>
